@@ -2,7 +2,7 @@
 
 ## 개요
 
-이 문서는 AI 재고·수요 예측 운영툴의 PostgreSQL 데이터베이스 스키마 구조를 설명합니다.
+이 문서는 AI 재고·수요 예측 운영툴의 PostgreSQL  P데이터베이스 스키마 구조를 설명합니다.
 
 스키마는 **5개 레이어**로 구성됩니다:
 1. **Raw Layer**: 원본 데이터 (주문, 결제, 재고, 상품, 프로모션, 광고)
@@ -25,7 +25,7 @@ Raw Data → Staging → Mart → Features → ML Model → Predictions
 
 ## 1. Raw Layer (원본 데이터)
 
-### 1.1 products (상품 마스터)
+### 1.1 products (상품 마스터) P
 
 **목적**: SKU 단위 상품 기본 정보
 
