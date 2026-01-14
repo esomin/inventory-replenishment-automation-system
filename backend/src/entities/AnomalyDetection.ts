@@ -1,28 +1,42 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './BaseEntity';
 import { Product } from './Product';
 
 @Entity('anomaly_detections')
+@Index('idx_anomaly_sku_date', ['product', 'eventDate'])
+@Index('idx_anomaly_status', ['status'])
 export class AnomalyDetection extends BaseEntity {
-    @Column({ name: 'detection_date' })
-    detectionDate: Date;
+    @Column({ name: 'sku_id' })
+    skuId: string;
 
-    @Column({ name: 'product_id' })
-    productId: string;
-
-    @ManyToOne(() => Product)
-    @JoinColumn({ name: 'product_id' })
+    @ManyToOne(() => Product, (product) => product.anomalies)
+    @JoinColumn({ name: 'sku_id' })
     product: Product;
 
+    @Column({ name: 'event_date' })
+    eventDate: Date;
+
+    @Column({ name: 'anomaly_type' })
+    anomalyType: string;
+
     @Column()
-    anomaly_type: string; // SALES_SPIKE, SALES_DROP, HIGH_RETURN, etc.
+    severity: string;
 
-    @Column('decimal', { precision: 10, scale: 2, nullable: true })
-    severity_score: number;
+    @Column('decimal', { name: 'observed_value', precision: 10, scale: 2 })
+    observedValue: number;
 
-    @Column('text', { nullable: true })
-    description: string;
+    @Column('decimal', { name: 'expected_value', precision: 10, scale: 2 })
+    expectedValue: number;
 
-    @Column({ default: false })
-    is_resolved: boolean;
+    @Column('decimal', { name: 'delta_value', precision: 10, scale: 2 })
+    deltaValue: number;
+
+    @Column({ type: 'jsonb', nullable: true })
+    details: Record<string, any>;
+
+    @Column()
+    status: string;
+
+    @Column({ name: 'resolved_at', nullable: true })
+    resolvedAt: Date;
 }

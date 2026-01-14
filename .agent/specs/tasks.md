@@ -86,7 +86,7 @@
 
 ---
 
-## TASK 4: 백엔드 엔티티 및 리포지토리 생성
+## TASK 4: 백엔드 엔티티 및 리포지토리 생성 (완료)
 
 **Goal**: TypeORM 엔티티 및 리포지토리 생성
 
@@ -103,11 +103,11 @@
 - 각 엔티티에 createdAt, updatedAt 포함
 
 **Verification checklist**:
-- [ ] 모든 Raw 테이블에 대응하는 엔티티 생성됨
-- [ ] Staging, Mart, Prediction 엔티티 생성됨
-- [ ] Admin 엔티티 생성됨
-- [ ] 엔티티 간 관계 정의됨
-- [ ] 마이그레이션 실행 가능
+- [x] 모든 Raw 테이블에 대응하는 엔티티 생성됨
+- [x] Staging, Mart, Prediction 엔티티 생성됨
+- [x] Admin 엔티티 생성됨
+- [x] 엔티티 간 관계 정의됨
+- [x] 마이그레이션 실행 가능
 
 ---
 
@@ -327,7 +327,7 @@
 
 ---
 
-## TASK 12: Core System E2E Verification (신규 추가)
+## TASK 12: Core System E2E Verification
 
 **Goal**: 코어 기능(로그인 → SKU 확인 → 발주 생성 → 승인) 통합 테스트 및 앱 정상 실행 확인
 

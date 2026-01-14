@@ -1,23 +1,36 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './BaseEntity';
+import { Product } from './Product';
 
 @Entity('promotions')
+@Index('idx_promotions_period', ['startAt', 'endAt'])
+@Index('idx_promotions_target_sku', ['product'])
 export class Promotion extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
-    type: string; // DISCOUNT, BUNDLE, etc.
+    @Column({ name: 'promotion_type' })
+    promotionType: string;
 
-    @Column('decimal', { precision: 5, scale: 2, nullable: true })
-    discount_rate: number;
+    @Column({ name: 'discount_type' })
+    discountType: string;
 
-    @Column({ name: 'start_date' })
-    startDate: Date;
+    @Column('decimal', { name: 'discount_value', precision: 10, scale: 2 })
+    discountValue: number;
 
-    @Column({ name: 'end_date' })
-    endDate: Date;
+    @Column({ name: 'start_at' })
+    startAt: Date;
 
-    @Column({ type: 'jsonb', nullable: true })
-    target_skus: string[];
+    @Column({ name: 'end_at' })
+    endAt: Date;
+
+    @Column({ name: 'target_sku_id', nullable: true })
+    targetSkuId: string;
+
+    @ManyToOne(() => Product, (product) => product.promotions, { nullable: true })
+    @JoinColumn({ name: 'target_sku_id' })
+    product: Product;
+
+    @Column({ name: 'target_category', nullable: true })
+    targetCategory: string;
 }

@@ -1,37 +1,59 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './BaseEntity';
 import { Product } from './Product';
 
 @Entity('sku_features')
+@Index('idx_sku_features_sku_date_horizon', ['product', 'featureDate', 'horizonDays'])
 export class SkuFeature extends BaseEntity {
-    @Column({ name: 'date' })
-    date: Date;
+    @Column({ name: 'sku_id' })
+    skuId: string;
 
-    @Column({ name: 'product_id' })
-    productId: string;
-
-    @ManyToOne(() => Product)
-    @JoinColumn({ name: 'product_id' })
+    @ManyToOne(() => Product, (product) => product.features)
+    @JoinColumn({ name: 'sku_id' })
     product: Product;
 
-    @Column('int', { nullable: true })
-    day_of_week: number; // 0-6
+    @Column({ name: 'feature_date' })
+    featureDate: Date;
 
-    @Column({ nullable: true })
+    @Column('int', { name: 'horizon_days' })
+    horizonDays: number;
+
+    // Time Features
+    @Column('int', { name: 'day_of_week' })
+    dayOfWeek: number;
+
+    @Column({ name: 'is_weekend' })
+    isWeekend: boolean;
+
+    @Column()
     season: string;
 
-    @Column('decimal', { precision: 10, scale: 2, nullable: true })
-    price_volatility: number;
+    // Price Features
+    @Column('decimal', { name: 'base_price', precision: 10, scale: 2 })
+    basePrice: number;
 
-    @Column('decimal', { precision: 5, scale: 2, nullable: true })
-    discount_rate: number;
+    @Column('decimal', { name: 'current_price', precision: 10, scale: 2 })
+    currentPrice: number;
 
-    @Column('int', { nullable: true })
-    lead_time_days: number;
+    @Column('decimal', { name: 'discount_rate', precision: 5, scale: 2 })
+    discountRate: number;
 
-    @Column('decimal', { precision: 10, scale: 2, nullable: true })
-    inventory_turnover: number;
+    // Ops Features
+    @Column('int', { name: 'lead_time_days' })
+    leadTimeDays: number;
 
-    @Column('decimal', { precision: 5, scale: 2, nullable: true })
-    return_rate: number;
+    @Column('decimal', { name: 'inventory_turnover', precision: 10, scale: 2 })
+    inventoryTurnover: number;
+
+    @Column('decimal', { name: 'return_rate', precision: 5, scale: 2 })
+    returnRate: number;
+
+    @Column('decimal', { name: 'promo_intensity', precision: 10, scale: 2 })
+    promoIntensity: number;
+
+    @Column('decimal', { name: 'ad_intensity', precision: 10, scale: 2 })
+    adIntensity: number;
+
+    @Column({ name: 'raw_features', type: 'jsonb', nullable: true })
+    rawFeatures: Record<string, any>;
 }

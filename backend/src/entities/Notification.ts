@@ -1,25 +1,29 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './BaseEntity';
 import { User } from './User';
 
 @Entity('notifications')
+@Index('idx_notifications_channel', ['channel'])
 export class Notification extends BaseEntity {
-    @Column({ name: 'user_id' })
-    userId: string;
-
-    @ManyToOne(() => User)
-    @JoinColumn({ name: 'user_id' })
-    user: User;
+    @Column()
+    name: string;
 
     @Column()
-    type: string; // SYSTEM, ALERT, WORKFLOW
+    channel: string; // SLACK, EMAIL
 
-    @Column()
-    title: string;
+    @Column({ name: 'target_address' })
+    targetAddress: string;
 
-    @Column('text')
-    message: string;
+    @Column({ name: 'is_active', default: true })
+    isActive: boolean;
 
-    @Column({ default: false, name: 'is_read' })
-    isRead: boolean;
+    @Column({ type: 'jsonb', nullable: true })
+    config: Record<string, any>;
+
+    @Column({ name: 'created_by' })
+    createdById: string;
+
+    @ManyToOne(() => User, (user) => user.notifications)
+    @JoinColumn({ name: 'created_by' })
+    createdBy: User;
 }

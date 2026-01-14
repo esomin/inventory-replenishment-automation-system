@@ -1,25 +1,27 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './BaseEntity';
 import { User } from './User';
 
 @Entity('audit_logs')
+@Index('idx_audit_logs_user', ['user'])
+@Index('idx_audit_logs_entity', ['entityType', 'entityId'])
 export class AuditLog extends BaseEntity {
-    @Column({ name: 'user_id', nullable: true })
+    @Column({ name: 'user_id' })
     userId: string;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, (user) => user.auditLogs)
     @JoinColumn({ name: 'user_id' })
     user: User;
 
     @Column()
-    action: string; // LOGIN, CREATE_PO, APPROVE_PO, etc.
+    action: string;
 
-    @Column({ name: 'entity_type', nullable: true })
+    @Column({ name: 'entity_type' })
     entityType: string;
 
-    @Column({ name: 'entity_id', nullable: true })
+    @Column({ name: 'entity_id' })
     entityId: string;
 
     @Column({ type: 'jsonb', nullable: true })
-    details: any; // Changed fields, old/new values, etc.
+    metadata: Record<string, any>;
 }
