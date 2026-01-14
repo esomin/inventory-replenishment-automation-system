@@ -1,88 +1,186 @@
-# AI 재고·수요 예측 운영툴
+# Inventory Forecaster
 
-AI 재고·수요 예측 운영툴은 수요 예측부터 발주 추천, 이상 징후 탐지까지 자동화하는 시스템입니다.
+AI-powered inventory and demand forecasting system for e-commerce. Automates demand prediction, purchase order recommendations, and anomaly detection.
 
+## Architecture
 
-## 프로젝트 구조
+Full-stack system with 4 independent modules:
 
-```
-.
-├── frontend/          # React + AntD 프론트엔드
-├── backend/           # NestJS 백엔드 API
-├── etl/               # Python ETL 파이프라인
-├── ml/                # Python ML 모델
-├── spec/              # 요구사항 명세
-└── plan/              # 실행 계획
+| Module | Stack | Description |
+|--------|-------|-------------|
+| **Backend** | NestJS + PostgreSQL + TypeORM | Core business logic and REST API |
+| **Frontend** | React + Ant Design | Admin dashboard for visualization and operations |
+| **ETL** | Python + SQLAlchemy | Data pipeline for Raw → Staging → Mart transformation |
+| **ML** | Python + XGBoost/LightGBM | Demand forecasting and anomaly detection models |
 
-```
+## Quick Start
 
-1. Backend (NestJS + PostgreSQL): 핵심 비즈니스 로직과 API를 담당합니다. TypeORM을 사용하여 DB와 상호작용하며, 모듈 단위(Auth, SKU, Prediction 등)로 구조화되어 있습니다.
-2. Frontend (React + AntD): 관리자용 웹 대시보드로, 데이터 시각화와 직관적인 발주 운영을 지원합니다.
-3. ETL (Python): 다양한 소스(주문, 재고 등)에서 데이터를 수집(Raw)하여 학습용 데이터(Mart)로 가공하는 파이프라인입니다.
-4. ML (Python): XGBoost/LightGBM 등을 활용해 수요를 예측하고 이상치를 탐지합니다.
+### Prerequisites
 
-## 기술 스택
+- Node.js 18+
+- Python 3.10+
+- Docker & Docker Compose
+- PostgreSQL 15+
 
-- **Frontend**: React + Ant Design + TypeScript
-- **Backend**: NestJS + PostgreSQL + TypeORM
-- **ETL**: Python + SQLAlchemy
-- **ML**: Python + XGBoost/LightGBM
-
-## 빠른 시작
-
-### 1. 데이터베이스 실행
+### Database Setup
 
 ```bash
+# Start PostgreSQL
 docker-compose up -d
+
+# Run migrations
+cd backend
+npm run migration:run
 ```
 
-### 2. 백엔드 실행
+### Backend (NestJS)
 
 ```bash
 cd backend
 npm install
-npm run start:dev
+npm run start:dev          # Development mode (http://localhost:3000)
 ```
 
-### 3. 프론트엔드 실행
+### Frontend (React)
 
 ```bash
 cd frontend
 npm install
-npm start
+npm start                  # Development server (http://localhost:3001)
 ```
 
-### 4. ETL 실행
+### ETL (Python)
 
 ```bash
 cd etl
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python scripts/generate_fake_data.py
-python scripts/run_etl.py
+
+python scripts/generate_fake_data.py  # Generate test data
+python scripts/run_etl.py             # Run ETL pipeline
 ```
 
-### 5. ML 모델 실행
+### ML (Python)
 
 ```bash
 cd ml
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python scripts/train_model.py
-python scripts/predict.py
+
+python scripts/train_model.py         # Train model
+python scripts/predict.py             # Run predictions
+python scripts/detect_anomalies.py    # Run anomaly detection
 ```
 
-## 주요 기능
+## Data Architecture
 
-- SKU 단위 수요 예측 (7일/14일/30일)
-- 재고 소진 예상일 및 발주 추천
-- 품절 위험 알림
-- 이상징후 탐지 (판매 급증/급감, 반품률 폭증)
-- 발주안 생성/승인 워크플로우
-- 설명 가능한 AI (특징 기여도/룰 기반 설명)
+### 5-Layer Database Schema
 
-## 개발 가이드
+```
+External Sources
+      ↓
+Raw Tables (orders, inventory, products, promotions, ad_campaigns)
+      ↓
+ETL Pipeline (Python)
+      ↓
+Staging Tables (data validation & transformation)
+      ↓
+Mart Tables (sku_daily_stats, sku_features)
+      ↓
+ML Models (XGBoost/LightGBM)
+      ↓
+Prediction Tables (predictions, anomaly_detections)
+      ↓
+Backend API (NestJS)
+      ↓
+Frontend Dashboard (React + AntD)
+```
 
-각 모듈의 상세한 실행 방법은 해당 디렉토리의 README.md를 참조하세요.
+| Layer | Tables | Purpose |
+|-------|--------|---------|
+| **Raw** | products, orders, payments, inventory, promotions, ad_campaigns | Original source data |
+| **Staging** | staging_orders, staging_inventory | ETL intermediate transformation |
+| **Mart** | sku_daily_stats, sku_features | Aggregated data and ML features |
+| **Prediction** | predictions, anomaly_detections | ML model outputs |
+| **Admin** | users, roles, purchase_orders, notifications, audit_logs | Application management |
+
+## Key Features
+
+### Demand Forecasting
+- Predicts demand for 7/14/30-day horizons
+- Features: day_of_week, season, price trends, discount_rate, inventory_turnover, etc.
+- Explainability via SHAP feature importance
+
+### Anomaly Detection
+- `SALES_SPIKE` / `SALES_DROP`: Sudden demand changes
+- `RETURN_SURGE`: Abnormal return rates
+- `INVENTORY_ANOMALY`: Stock level issues
+
+### Purchase Order Workflow
+- Status flow: `DRAFT` → `PENDING` → `APPROVED`/`REJECTED` → `COMPLETED`
+- Role-based access: OPERATOR (create), MANAGER (approve), ADMIN (full access)
+
+## Environment Variables
+
+Copy `.env.example` to `.env` in each module directory:
+
+**Backend** (`backend/.env`):
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=inventory_db
+JWT_SECRET=your-secret-key
+```
+
+**ETL & ML** (`.env` in respective directories):
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=inventory_db
+```
+
+## Available Scripts
+
+### Backend
+| Command | Description |
+|---------|-------------|
+| `npm run start:dev` | Development mode with hot reload |
+| `npm run build` | Production build |
+| `npm test` | Run all tests |
+| `npm run test:cov` | Tests with coverage |
+| `npm run lint` | ESLint |
+| `npm run migration:run` | Run database migrations |
+| `npm run migration:generate` | Generate new migration |
+
+### Frontend
+| Command | Description |
+|---------|-------------|
+| `npm start` | Development server |
+| `npm run build` | Production build |
+| `npm test` | Run tests |
+
+## Documentation
+
+- Database schema: `backend/docs/SCHEMA.md`
+- Development plan: `plan/plan.md`
+
+## Development Status
+
+- [x] Project structure
+- [x] Database schema & migrations
+- [x] Backend basic setup (NestJS + TypeORM)
+- [x] TypeORM entities
+- [ ] Authentication (JWT)
+- [ ] Frontend dashboard
+- [ ] ETL pipeline
+- [ ] ML models
+
+## License
+
+MIT
