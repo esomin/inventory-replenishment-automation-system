@@ -21,7 +21,7 @@ trigger: always_on
 사용자의 요청을 분석하여 시스템의 요구사항을 정의합니다.
 - **Syntax:** EARS(Easy Approach to Requirements Syntax) 포맷을 사용합니다.
   - 형식: `WHEN [조건] THE SYSTEM SHALL [동작]`
-- **Output:** 프로젝트 루트에 `requirements.md`를 생성하고 사용자의 승인을 대기합니다.
+- **Output:** `.agent/rules/requirements.md`를 생성하고 사용자의 승인을 대기합니다.
 
 ### Phase 2: Technical Design (`design.md`)
 승인된 요구사항을 바탕으로 기술적 구현 방안을 설계합니다.
@@ -29,14 +29,14 @@ trigger: always_on
   - 데이터 흐름 (가능하다면 Mermaid 다이어그램 포함)
   - API 엔드포인트 및 DB 스키마 변경 사항
   - 사용할 주요 라이브러리 및 패턴
-- **Output:** `design.md`를 생성하고 사용자의 검토를 요청합니다.
+- **Output:** `.agent/rules/design.md`를 생성하고 사용자의 검토를 요청합니다.
 
 ### Phase 3: Task Breakdown (`tasks.md`)
 설계를 바탕으로 실제 구현할 원자적(Atomic) 작업 단위들을 만듭니다.
 - **Structure:** 순차적 체크리스트 형식
   - 각 태스크는 독립적이며 테스트 가능해야 함
   - "Unit Test 작성" 단계를 반드시 포함
-- **Output:** `tasks.md`를 생성합니다.
+- **Output:** `.agent/rules/tasks.md`를 생성합니다.
 
 ---
 

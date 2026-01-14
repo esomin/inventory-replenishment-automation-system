@@ -13,6 +13,29 @@ Full-stack system with 4 independent modules:
 | **ETL** | Python + SQLAlchemy | Data pipeline for Raw → Staging → Mart transformation |
 | **ML** | Python + XGBoost/LightGBM | Demand forecasting and anomaly detection models |
 
+## System Requirements
+
+Based on EARS syntax defined in `requirements.md`.
+
+### 1. Data Processing
+- **Collection**: Real-time ingestion of orders, inventory, and product data into Raw storage.
+- **Aggregation**: Automated transformation into Mart tables with feature engineering (seasonality, price trends, etc.).
+
+### 2. AI & Forecasting
+- **Forecasting**: Demand prediction (7/14/30 days) using XGBoost/LightGBM.
+- **Anomaly Detection**: Detection of abnormal sales spikes/drops and return rate surges.
+- **Explainability**: XAI features to explain prediction rationale (Feature Importance).
+
+### 3. Order Management
+- **Recommendations**: Automated purchase order recommendations based on forecast and stock depletion.
+- **Risk Management**: "Stockout Risk TOP" identification and highlighting.
+- **Workflow**: Purchase order approval workflow (Draft → Pending → Approved/Rejected).
+
+### 4. Admin & Interface
+- **Dashboard**: KPI monitoring and notification settings.
+- **Operations**: Advanced SKU filtering, sorting, and management.
+- **Security**: Role-Based Access Control (RBAC) and Audit Logging for critical actions.
+
 ## Quick Start
 
 ### Prerequisites
