@@ -9,6 +9,9 @@ import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { OrdersModule } from './orders/orders.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { MarketingModule } from './promotions/marketing.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -26,6 +29,9 @@ import configuration from './config/configuration';
     AuditLogsModule,
     NotificationsModule,
     OrdersModule,
+    InventoryModule,
+    MarketingModule,
+    AnalyticsModule,
   ],
 })
 export class AppModule { }
