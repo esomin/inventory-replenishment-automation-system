@@ -205,7 +205,7 @@
 
 ---
 
-## TASK 8: 백엔드 SKU 및 예측 API
+## TASK 8: 백엔드 SKU 및 예측 API (완료)
 
 **Goal**: SKU 리스트, 수요 예측, 발주 추천 관련 API 구현
 
@@ -230,11 +230,11 @@
 - 페이지네이션 지원
 
 **Verification checklist**:
-- [ ] SKU 리스트 조회 API 동작
-- [ ] 필터/정렬 기능 동작
-- [ ] 수요 예측 데이터 조회 API 동작
-- [ ] 발주안 생성/조회 API 동작
-- [ ] 품절 위험 TOP 조회 API 동작
+- [x] SKU 리스트 조회 API 동작
+- [x] 필터/정렬 기능 동작
+- [x] 수요 예측 데이터 조회 API 동작
+- [x] 발주안 생성/조회 API 동작
+- [x] 품절 위험 TOP 조회 API 동작 (Implemented via filters in SKU service)
 
 ---
 
