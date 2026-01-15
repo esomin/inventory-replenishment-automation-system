@@ -8,6 +8,7 @@ import { PredictionsModule } from './predictions/predictions.module';
 import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { OrdersModule } from './orders/orders.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -24,6 +25,7 @@ import configuration from './config/configuration';
     PurchaseOrdersModule,
     AuditLogsModule,
     NotificationsModule,
+    OrdersModule,
   ],
 })
 export class AppModule { }
