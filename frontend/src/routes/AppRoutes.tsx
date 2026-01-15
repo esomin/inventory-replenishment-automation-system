@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
+import SKUList from '../pages/SKUList';
 import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 
@@ -17,6 +18,15 @@ const AppRoutes: React.FC = () => {
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/skus"
+                        element={
+                            <ProtectedRoute>
+                                <SKUList />
                             </ProtectedRoute>
                         }
                     />
