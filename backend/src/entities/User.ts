@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index, OneToMany } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { Role } from './Role';
 import { PurchaseOrder } from './PurchaseOrder';
 import { Notification } from './Notification';
@@ -7,7 +7,7 @@ import { AuditLog } from './AuditLog';
 
 @Entity('users')
 @Index('idx_users_role_id', ['role'])
-export class User extends BaseEntity {
+export class User extends BaseEntitySoftDelete {
     @Column({ unique: true })
     email: string;
 

@@ -1,10 +1,10 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index, Unique } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { Product } from './Product';
 
 @Entity('inventory')
 @Unique('ux_inventory_sku_location_date', ['product', 'locationCode', 'snapshotDate'])
-export class Inventory extends BaseEntity {
+export class Inventory extends BaseEntitySoftDelete {
     @Column({ name: 'sku_id' })
     skuId: string;
 

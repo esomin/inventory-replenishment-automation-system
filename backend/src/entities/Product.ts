@@ -1,5 +1,5 @@
 import { Entity, Column, OneToMany } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { Inventory } from './Inventory';
 import { Order } from './Order';
 import { Prediction } from './Prediction';
@@ -11,7 +11,7 @@ import { AnomalyDetection } from './AnomalyDetection';
 import { PurchaseOrder } from './PurchaseOrder';
 
 @Entity('products')
-export class Product extends BaseEntity {
+export class Product extends BaseEntitySoftDelete {
     @Column({ unique: true })
     sku: string;
 

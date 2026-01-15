@@ -78,7 +78,7 @@ const Login: React.FC = () => {
 
                     <div style={{ textAlign: 'center' }}>
                         <Text type="secondary" style={{ fontSize: 12 }}>
-                            테스트 계정: admin@example.com / password123
+                            테스트 계정: admin@example.com / 123
                         </Text>
                     </div>
                 </Form>

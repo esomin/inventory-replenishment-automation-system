@@ -1,11 +1,11 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { Order } from './Order';
 
 @Entity('payments')
 @Index('idx_payments_order_id', ['order'])
 @Index('idx_payments_status', ['status'])
-export class Payment extends BaseEntity {
+export class Payment extends BaseEntitySoftDelete {
     @Column({ name: 'order_id' })
     orderId: string;
 

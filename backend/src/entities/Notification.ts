@@ -1,10 +1,10 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { User } from './User';
 
 @Entity('notifications')
 @Index('idx_notifications_channel', ['channel'])
-export class Notification extends BaseEntity {
+export class Notification extends BaseEntitySoftDelete {
     @Column()
     name: string;
 

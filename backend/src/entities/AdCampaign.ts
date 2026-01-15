@@ -1,11 +1,11 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { Product } from './Product';
 
 @Entity('ad_campaigns')
 @Index('idx_ad_campaigns_period', ['startAt', 'endAt'])
 @Index('idx_ad_campaigns_sku', ['product'])
-export class AdCampaign extends BaseEntity {
+export class AdCampaign extends BaseEntitySoftDelete {
     @Column()
     name: string;
 

@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index, OneToMany, Check } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntitySoftDelete } from './BaseEntity';
 import { Product } from './Product';
 import { Payment } from './Payment';
 
@@ -8,7 +8,7 @@ import { Payment } from './Payment';
 @Index('idx_orders_sku_date', ['product', 'orderDate'])
 @Index('idx_orders_channel', ['channel'])
 @Check('quantity > 0')
-export class Order extends BaseEntity {
+export class Order extends BaseEntitySoftDelete {
     @Column({ name: 'order_number', unique: true })
     orderNumber: string;
 
