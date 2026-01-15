@@ -1,6 +1,8 @@
 import React from 'react';
 import { ConfigProvider } from 'antd';
+import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes/AppRoutes';
+import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
 
 const App: React.FC = () => {
@@ -12,7 +14,11 @@ const App: React.FC = () => {
         },
       }}
     >
-      <AppRoutes />
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
     </ConfigProvider>
   );
 };

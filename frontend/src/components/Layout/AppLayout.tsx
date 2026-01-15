@@ -1,60 +1,46 @@
-import React, { useState } from 'react';
-import { Layout, Menu, Button, Typography, Avatar, Dropdown } from 'antd';
+import React from 'react';
+import { Layout, Menu, Button, Typography, theme, Avatar, Dropdown } from 'antd';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
-    DashboardOutlined,
-    AppstoreOutlined,
-    ShoppingCartOutlined,
     BarChartOutlined,
-    SettingOutlined,
+    DatabaseOutlined,
+    ShoppingCartOutlined,
     UserOutlined,
-    LogoutOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined
+    LogoutOutlined
 } from '@ant-design/icons';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const { Header, Sider, Content } = Layout;
+const { Title, Text } = Typography;
 
 const AppLayout: React.FC = () => {
-    const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, logout } = useAuth();
+    const { logout, user } = useAuth();
+    const {
+        token: { colorBgContainer, borderRadiusLG },
+    } = theme.useToken();
 
     const menuItems = [
         {
             key: '/',
-            icon: <DashboardOutlined />,
+            icon: <BarChartOutlined />,
             label: '대시보드',
         },
         {
             key: '/skus',
-            icon: <AppstoreOutlined />,
-            label: '재고 관리',
-        },
-        {
-            key: '/predictions',
-            icon: <BarChartOutlined />,
-            label: '수요 예측',
-            disabled: true, // Not implemented yet
+            icon: <DatabaseOutlined />,
+            label: '재고(SKU) 관리',
         },
         {
             key: '/purchase-orders',
             icon: <ShoppingCartOutlined />,
-            label: '발주 관리',
-            disabled: true, // Not implemented yet
-        },
-        {
-            key: '/settings',
-            icon: <SettingOutlined />,
-            label: '설정',
-            disabled: true, // Not implemented yet
-        },
+            label: '발주안 관리',
+        }
     ];
 
-    const handleMenuClick = ({ key }: { key: string }) => {
-        navigate(key);
+    const handleMenuClick = (info: { key: string }) => {
+        navigate(info.key);
     };
 
     const handleLogout = () => {
@@ -62,13 +48,39 @@ const AppLayout: React.FC = () => {
         navigate('/login');
     };
 
-
+    const userMenu = {
+        items: [
+            {
+                key: 'logout',
+                label: '로그아웃',
+                icon: <LogoutOutlined />,
+                onClick: handleLogout,
+                danger: true,
+            }
+        ]
+    };
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider trigger={null} collapsible collapsed={collapsed}>
-                <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', color: '#fff', lineHeight: '32px', fontWeight: 'bold' }}>
-                    {collapsed ? 'IF' : 'Inventory Forecaster'}
+            <Sider width={260} style={{ background: '#001529' }}>
+                <div style={{ padding: '24px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                        width: 32,
+                        height: 32,
+                        background: '#1677ff',
+                        borderRadius: 6,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: '18px'
+                    }}>
+                        IF
+                    </div>
+                    <Title level={5} style={{ color: 'white', margin: 0, fontWeight: 600 }}>
+                        Inventory<br />Forecaster
+                    </Title>
                 </div>
                 <Menu
                     theme="dark"
@@ -76,56 +88,35 @@ const AppLayout: React.FC = () => {
                     selectedKeys={[location.pathname]}
                     items={menuItems}
                     onClick={handleMenuClick}
+                    style={{ borderRight: 0 }}
                 />
             </Sider>
-            <Layout className="site-layout">
-                <Header style={{ padding: '0 24px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Button
-                        type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '16px',
-                            width: 64,
-                            height: 64,
-                        }}
-                    />
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography.Text strong style={{ marginRight: 16 }}>
-                            {user?.name || 'User'} ({user?.role})
-                        </Typography.Text>
-                        <Dropdown menu={{
-                            items: [
-                                {
-                                    key: '1',
-                                    icon: <UserOutlined />,
-                                    label: '프로필'
-                                },
-                                {
-                                    type: 'divider'
-                                },
-                                {
-                                    key: '2',
-                                    icon: <LogoutOutlined />,
-                                    label: '로그아웃',
-                                    danger: true,
-                                    onClick: handleLogout
-                                }
-                            ]
-                        }} placement="bottomRight">
-                            <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
-                        </Dropdown>
-                    </div>
+            <Layout>
+                <Header style={{
+                    padding: '0 24px',
+                    background: colorBgContainer,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+                    zIndex: 1
+                }}>
+                    <Dropdown menu={userMenu} placement="bottomRight" arrow>
+                        <Button type="text" style={{ height: 'auto', padding: '4px 8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div style={{ textAlign: 'right', marginRight: 4 }}>
+                                    <Text strong style={{ display: 'block', lineHeight: 1.2 }}>{user?.email || 'User'}</Text>
+                                    <Text type="secondary" style={{ fontSize: '11px' }}>{user?.role || 'Operator'}</Text>
+                                </div>
+                                <Avatar
+                                    style={{ backgroundColor: '#1677ff' }}
+                                    icon={<UserOutlined />}
+                                />
+                            </div>
+                        </Button>
+                    </Dropdown>
                 </Header>
-                <Content
-                    style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        minHeight: 280,
-                        background: '#fff', // Or transparent if pages have their own cards
-                        overflow: 'initial'
-                    }}
-                >
+                <Content style={{ margin: '24px 16px', padding: 24, minHeight: 280 }}>
                     <Outlet />
                 </Content>
             </Layout>

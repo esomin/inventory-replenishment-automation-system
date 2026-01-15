@@ -1,30 +1,35 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
-import Dashboard from '../pages/Dashboard';
-import SKUList from '../pages/SKUList';
 import ProtectedRoute from './ProtectedRoute';
-import { AuthProvider } from '../contexts/AuthContext';
-
 import AppLayout from '../components/Layout/AppLayout';
+import SKUList from '../pages/SKUList';
+import PurchaseOrders from '../pages/PurchaseOrders';
+// Dashboard component to be implemented in TASK 21, redirecting to SKUs for now or a placeholder
+
+const DashboardRedirect = () => {
+    return <Navigate to="/skus" replace />;
+};
 
 const AppRoutes: React.FC = () => {
     return (
-        <AuthProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/login" element={<Login />} />
+        <Routes>
+            <Route path="/login" element={<Login />} />
 
-                    {/* Protected Routes wrapped in AppLayout */}
-                    <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/skus" element={<SKUList />} />
-                    </Route>
+            {/* Protected Routes */}
+            <Route path="/" element={
+                <ProtectedRoute>
+                    <AppLayout />
+                </ProtectedRoute>
+            }>
+                <Route index element={<DashboardRedirect />} />
+                <Route path="skus" element={<SKUList />} />
+                <Route path="purchase-orders" element={<PurchaseOrders />} />
 
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </BrowserRouter>
-        </AuthProvider>
+                {/* Fallback */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+        </Routes>
     );
 };
 
