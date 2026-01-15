@@ -141,7 +141,7 @@
 
 ---
 
-## TASK 6: 프론트엔드 기본 구조 및 설정
+## TASK 6: 프론트엔드 기본 구조 및 설정 (완료)
 
 **Goal**: React + AntD 프론트엔드 기본 구조 생성
 
@@ -152,7 +152,7 @@
 - frontend/package.json
 - frontend/src/ 디렉토리 구조
 - frontend/src/App.tsx
-- frontend/src/index.tsx
+- frontend/src/main.tsx
 - frontend/src/config/ 디렉토리 (API 설정)
 - frontend/src/services/ 디렉토리 (API 클라이언트)
 - frontend/src/utils/ 디렉토리
@@ -160,16 +160,16 @@
 - frontend/README.md
 
 **Constraints**:
-- React 18+
+- React 18+ (Vite)
 - Ant Design 사용
 - TypeScript 사용
 - Axios 또는 fetch로 API 호출
 
 **Verification checklist**:
-- [ ] React 애플리케이션 실행 가능
-- [ ] Ant Design 컴포넌트 사용 가능
-- [ ] API 클라이언트 설정됨
-- [ ] 환경변수 설정 가능
+- [x] React 애플리케이션 실행 가능
+- [x] Ant Design 컴포넌트 사용 가능
+- [x] API 클라이언트 설정됨
+- [x] 환경변수 설정 가능
 
 ---
 
