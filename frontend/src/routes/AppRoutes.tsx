@@ -1,14 +1,30 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from '../pages/Login';
+import Dashboard from '../pages/Dashboard';
+import ProtectedRoute from './ProtectedRoute';
+import { AuthProvider } from '../contexts/AuthContext';
 
 const AppRoutes: React.FC = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<div style={{ padding: 20 }}><h1>Inventory Forecaster</h1><p>Welcome to the system.</p></div>} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+
+                    <Route
+                        path="/"
+                        element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
     );
 };
 

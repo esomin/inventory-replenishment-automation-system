@@ -10,7 +10,7 @@
 **Goal**: 프로젝트 기본 구조와 설정 파일 생성
 
 **Input**: 
-- spec/spec.md 요구사항
+- design.md (Spec & Structure)
 
 **Output**:
 - 프로젝트 루트 디렉토리 구조
@@ -36,7 +36,7 @@
 **Goal**: PostgreSQL 데이터베이스 스키마 설계 및 마이그레이션 파일 생성
 
 **Input**:
-- spec.md의 데이터 소스 요구사항 (주문/결제, 재고, 상품, 프로모션, 광고 집행)
+- design.md의 Database Schema Design
 
 **Output**:
 - backend/migrations/ 디렉토리 및 마이그레이션 파일들
@@ -66,6 +66,7 @@
 
 **Input**:
 - TASK 2의 데이터베이스 스키마
+- design.md의 System Architecture
 
 **Output**:
 - backend/src/main.ts (애플리케이션 진입점)
@@ -116,7 +117,7 @@
 **Goal**: JWT 기반 인증 및 역할 기반 권한 시스템 구현
 
 **Input**:
-- spec.md의 권한 요구사항 (운영자/매니저/관리자)
+- design.md의 Auth & API Specification
 
 **Output**:
 - backend/src/auth/ 디렉토리 (인증 모듈)
@@ -146,7 +147,7 @@
 **Goal**: React + AntD 프론트엔드 기본 구조 생성
 
 **Input**:
-- spec.md의 프론트엔드 요구사항
+- design.md의 Frontend Architecture & Routes
 
 **Output**:
 - frontend/package.json
@@ -173,7 +174,7 @@
 
 ---
 
-## TASK 7: 프론트엔드 인증 및 라우팅
+## TASK 7: 프론트엔드 인증 및 라우팅 (완료)
 
 **Goal**: 로그인 페이지 및 라우팅 설정
 
@@ -182,7 +183,7 @@
 
 **Output**:
 - frontend/src/pages/Login.tsx
-- frontend/src/components/Auth/ 디렉토리
+- frontend/src/components/Auth/ 디렉토리 (Not created explicitly, used pages directly for simplicity)
 - frontend/src/contexts/AuthContext.tsx
 - frontend/src/routes/ 디렉토리
 - frontend/src/routes/ProtectedRoute.tsx
@@ -195,11 +196,12 @@
 - 로그인 상태 관리
 
 **Verification checklist**:
-- [ ] 로그인 페이지 렌더링됨
-- [ ] 로그인 기능 동작 (백엔드 연동)
-- [ ] 토큰 저장 및 관리됨
-- [ ] 보호된 라우트 동작
-- [ ] 역할 기반 접근 제어 동작
+- [x] 로그인 페이지 렌더링됨
+- [x] 로그인 기능 동작 (백엔드 연동)
+- [x] 토큰 저장 및 관리됨
+- [x] 보호된 라우트 동작
+- [x] 역할 기반 접근 제어 동작
+- [x] 앱 실행 및 로그인/라우팅 흐름 간단 체크 완료 (로그인 -> 대시보드 진입)
 
 ---
 
@@ -356,7 +358,7 @@
 **Goal**: Python ETL 파이프라인 기본 구조 및 설정 생성
 
 **Input**:
-- spec.md의 ETL 요구사항
+- design.md의 ETL Architecture
 
 **Output**:
 - etl/requirements.txt
@@ -410,7 +412,7 @@
 
 **Input**:
 - TASK 14의 Staging 데이터
-- spec.md의 Feature 요구사항
+- design.md의 Data Flow & Mart definition
 
 **Output**:
 - etl/src/etl/aggregators/ 디렉토리
