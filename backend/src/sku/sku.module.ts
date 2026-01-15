@@ -3,3 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SkuController } from './sku.controller';
 import { SkuService } from './sku.service';
 import { Product } from '../entities/Product';
+
+@Module({
+    imports: [TypeOrmModule.forFeature([Product])],
+    controllers: [SkuController],
+    providers: [SkuService],
+    exports: [SkuService],
+})
+export class SkuModule { }
