@@ -6,6 +6,8 @@ import SKUList from '../pages/SKUList';
 import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 
+import AppLayout from '../components/Layout/AppLayout';
+
 const AppRoutes: React.FC = () => {
     return (
         <AuthProvider>
@@ -13,23 +15,11 @@ const AppRoutes: React.FC = () => {
                 <Routes>
                     <Route path="/login" element={<Login />} />
 
-                    <Route
-                        path="/"
-                        element={
-                            <ProtectedRoute>
-                                <Dashboard />
-                            </ProtectedRoute>
-                        }
-                    />
-
-                    <Route
-                        path="/skus"
-                        element={
-                            <ProtectedRoute>
-                                <SKUList />
-                            </ProtectedRoute>
-                        }
-                    />
+                    {/* Protected Routes wrapped in AppLayout */}
+                    <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/skus" element={<SKUList />} />
+                    </Route>
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
