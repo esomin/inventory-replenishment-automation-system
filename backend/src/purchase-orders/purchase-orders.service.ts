@@ -6,7 +6,8 @@ import { Product } from '../entities/Product';
 import { CreatePurchaseOrderDto, UpdatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { User } from '../entities/User';
 import { v4 as uuidv4 } from 'uuid';
-
+import { AuditLogsService } from '../audit-logs/audit-logs.service';
+import { NotificationsService } from '../notifications/notifications.service';
 @Injectable()
 export class PurchaseOrdersService {
     constructor(
@@ -14,6 +15,8 @@ export class PurchaseOrdersService {
         private poRepository: Repository<PurchaseOrder>,
         @InjectRepository(Product)
         private productRepository: Repository<Product>,
+        private auditLogsService: AuditLogsService,
+        private notificationsService: NotificationsService,
     ) { }
 
     private generatePoNumber(): string {
@@ -38,7 +41,17 @@ export class PurchaseOrdersService {
             poNumber: this.generatePoNumber(),
         });
 
-        return this.poRepository.save(po);
+        const savedPo = await this.poRepository.save(po);
+
+        await this.auditLogsService.logAction(
+            user,
+            'CREATE_PO',
+            'PurchaseOrder',
+            savedPo.id,
+            { skuId: createDto.skuId, quantity: createDto.quantity }
+        );
+
+        return savedPo;
     }
 
     async findAll() {
@@ -60,6 +73,9 @@ export class PurchaseOrdersService {
     async update(id: string, updateDto: UpdatePurchaseOrderDto, user: User) {
         const po = await this.findOne(id);
 
+        const oldStatus = po.status;
+
+        // Apply updates
         if (updateDto.status) {
             po.status = updateDto.status;
             if (updateDto.status === 'APPROVED' || updateDto.status === 'REJECTED') {
@@ -67,10 +83,40 @@ export class PurchaseOrdersService {
                 // po.approvedAt = new Date(); // Field doesn't exist in entity yet
             }
         }
-
         if (updateDto.quantity) po.quantity = updateDto.quantity;
         if (updateDto.notes) po.notes = updateDto.notes;
 
-        return this.poRepository.save(po);
+        const savedPo = await this.poRepository.save(po);
+
+        // Audit Log
+        const changes = {
+            ...(oldStatus !== savedPo.status && { oldStatus, newStatus: savedPo.status }),
+            ...(updateDto.quantity && { quantity: updateDto.quantity }),
+        };
+
+        if (Object.keys(changes).length > 0) {
+            await this.auditLogsService.logAction(
+                user,
+                'UPDATE_PO',
+                'PurchaseOrder',
+                savedPo.id,
+                changes
+            );
+        }
+
+        // Notification if status changed
+        if (oldStatus !== savedPo.status) {
+            // Notify the requester
+            if (po.requestedBy) {
+                await this.notificationsService.notifyStatusChange(
+                    po.poNumber,
+                    oldStatus,
+                    savedPo.status,
+                    po.requestedBy.id
+                );
+            }
+        }
+
+        return savedPo;
     }
 }
